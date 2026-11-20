@@ -41,10 +41,12 @@ if [ ! -f "$PATCH" ]; then
 YAML
 fi
 
-HOST_IP="$(hostname -i 2>/dev/null | awk '{print $1}')"
-if [ -z "$HOST_IP" ]; then HOST_IP="127.0.0.1"; fi
-ARGS=(web --no-open --host "$HOST_IP" --port "${PORT:-3080}")
+ARGS=(web --no-open --host 127.0.0.1 --port 3090)
 if [ -n "$RAILWAY_PUBLIC_DOMAIN" ]; then
   ARGS+=(--trusted-host "$RAILWAY_PUBLIC_DOMAIN" --public-url "https://$RAILWAY_PUBLIC_DOMAIN")
 fi
-exec ./node_modules/.bin/dsh "${ARGS[@]}"
+./node_modules/.bin/dsh "${ARGS[@]}" &
+DSH_PID=$!
+node proxy.js &
+PROXY_PID=$!
+wait -n $DSH_PID $PROXY_PID
