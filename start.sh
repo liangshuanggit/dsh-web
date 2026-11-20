@@ -23,21 +23,16 @@ if [ ! -f "$PATCH" ]; then
 - id: llm-pi-ai
   config:
     providers:
-      seek100m:
-        apiKeyEnv: SEEK_API_KEY
+      exaone:
+        apiKeyEnv: EXAONE_API_KEY
         api: openai-completions
-        baseURL: https://100milionseek.top/v1
+        baseURL: https://api.exaone.ai/v1
         compat:
           supportsDeveloperRole: false
           maxTokensField: max_tokens
         models:
-          - id: deepseek-v4.1-flash-free
-            compat:
-              thinkingFormat: deepseek
-            reasoningEfforts:
-              off:
-              high: high
-              max: max
+          - id: k-exaone_v2.5
+            contextWindow: 512000
 YAML
 fi
 
